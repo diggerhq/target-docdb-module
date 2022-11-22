@@ -61,7 +61,7 @@ resource "aws_ssm_parameter" "master_password" {
 
 resource "aws_ssm_parameter" "docdb_uri" {
   name  = "${var.cluster_identifier}.docdb_uri"
-  value = "mongodb://${var.master_username}:${random_password.master_password.result}@${endpoint}/test?retryWrites=true&w=majority"
+  value = "mongodb://${var.master_username}:${random_password.master_password.result}@${aws_docdb_cluster.docdb.endpoint}/test?retryWrites=true&w=majority"
   type  = "SecureString"
 }
 

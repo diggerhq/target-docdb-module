@@ -9,9 +9,6 @@ variable "security_groups" {}
 
 variable "tags" {}
 
-
-variable "aws_app_identifier" {}
-
 variable "cluster_identifier" {
 }
 

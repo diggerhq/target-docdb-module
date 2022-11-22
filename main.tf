@@ -1,5 +1,5 @@
 resource "aws_docdb_subnet_group" "docdb_subnet_group" {
-  name        = "${var.aws_app_identifier}_docdb_subnet"
+  name        = "${var.cluster_identifier}_docdb_subnet"
   description = "Allowed subnets for DB cluster instances"
   subnet_ids  = var.private_subnets
 }
@@ -10,9 +10,9 @@ resource "random_password" "master_password" {
 }
 
 resource "aws_security_group" "docdb_sg" {
-  name_prefix = "${var.aws_app_identifier}-docdb-sg"
+  name_prefix = "${var.cluster_identifier}-docdb-sg"
   vpc_id      = var.vpc_id
-  description = "Digger docdb ${var.aws_app_identifier}"
+  description = "Digger docdb ${var.cluster_identifier}"
 
   # Only postgres in
   ingress {
@@ -54,13 +54,13 @@ resource "aws_docdb_cluster_instance" "default" {
 }
 
 resource "aws_ssm_parameter" "master_password" {
-  name  = "${var.aws_app_identifier}.master_password"
+  name  = "${var.cluster_identifier}.master_password"
   value = random_password.master_password.result
   type  = "SecureString"
 }
 
 resource "aws_ssm_parameter" "docdb_uri" {
-  name  = "${var.aws_app_identifier}.docdb_uri"
+  name  = "${var.cluster_identifier}.docdb_uri"
   value = "mongodb://${var.master_username}:${random_password.master_password.result}@${endpoint}/test?retryWrites=true&w=majority"
   type  = "SecureString"
 }
